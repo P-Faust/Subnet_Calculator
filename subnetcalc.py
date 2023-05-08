@@ -85,7 +85,7 @@ def binary_ip_to_decimal(ip_str, bool_first_host, bool_last_host):
         dec_ip = f"{octet_one}.{octet_two}.{octet_three}.{octet_four}"
     elif(bool_first_host == True):
         dec_ip = f"{octet_one}.{octet_two}.{octet_three}.{octet_four+1}"
-    elif(bool_last_host == True):
+    if(bool_last_host == True):
         dec_ip = f"{octet_one}.{octet_two}.{octet_three}.{octet_four-1}"
     return dec_ip
 
