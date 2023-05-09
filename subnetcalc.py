@@ -97,13 +97,21 @@ def get_new_subnet_mask(subnetmask,last_bit, needed_bits, subnet_bits):
     return new_subnet_mask
     
 def get_new_prefix(new_subnet_mask):
-    prefix = 1
+    prefix = 0
     subnet_mask = IPAddress(new_subnet_mask)
     subnet_mask_bin = subnet_mask.bin[2:]
     for x in subnet_mask_bin:
         if x == "1":
             prefix += 1 
     return prefix
+
+def validate_subnet(last_bit, needed_bit):
+    valid = False
+    if (last_bit + needed_bit < 31):
+        valid = True
+    else:
+        valid = False
+    return valid
 
 def main():
     global table
@@ -125,9 +133,13 @@ def main():
     subnet_mask = [*get_subnet_bin(args)]
     needed_bits_ls = get_needed_bits(args)
     last_bit = get_last_bit(subnet_mask)
-    print_subnets(subnet_mask,last_bit,needed_bits_ls, ip, args)
     new_subnet_mask = get_new_subnet_mask(subnet_mask,last_bit,get_subnet_bit_size(args),needed_bits_ls)
-    new_mask_prefix_table.add_row([new_subnet_mask, get_new_prefix(new_subnet_mask)])
-    print(new_mask_prefix_table)
+    cidr_prefix = get_new_prefix(new_subnet_mask)
+    if (validate_subnet(last_bit, get_subnet_bit_size(args))):
+        print_subnets(subnet_mask,last_bit,needed_bits_ls, ip, args)
+        new_mask_prefix_table.add_row([new_subnet_mask, get_new_prefix(new_subnet_mask)])
+        print(new_mask_prefix_table)
+    else:
+        print("Zu wenig Host Adressen um Subnetze zu bilden.")
 
 main()
