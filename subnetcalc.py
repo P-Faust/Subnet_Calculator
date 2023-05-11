@@ -14,7 +14,7 @@ def get_subnet_bin(args):
         return subnet_binary
     
 def get_needed_bits(args):
-    needed_bits = get_subnet_bit_size(args)
+    needed_bits = get_subnet_bit_count(args)
     bit_list = []
     count = 0
     for x in range(args.amount):
@@ -22,7 +22,7 @@ def get_needed_bits(args):
         count += 1    
     return bit_list
 
-def get_subnet_bit_size(args):
+def get_subnet_bit_count(args):
     needed_bits = 0
     pow_sum = 0
     while args.amount > pow_sum:
@@ -55,7 +55,7 @@ def print_hosts(subnetmask,last_bit,ip,args, subnet_id):
     ip_subnetted[0:last_bit] = ip_cut
     ip_str = ""
     ip_str = ''.join(ip_subnetted)
-    broadcast_ip = get_broadcast(ip_subnetted,last_bit,get_subnet_bit_size(args))
+    broadcast_ip = get_broadcast(ip_subnetted,last_bit,get_subnet_bit_count(args))
     net_id = binary_ip_to_decimal(ip_str,False,False)
     first_host = binary_ip_to_decimal(ip_str,True,False)
     last_host = binary_ip_to_decimal(broadcast_ip,False,True)
@@ -133,9 +133,9 @@ def main():
     subnet_mask = [*get_subnet_bin(args)]
     needed_bits_ls = get_needed_bits(args)
     last_bit = get_last_bit(subnet_mask)
-    new_subnet_mask = get_new_subnet_mask(subnet_mask,last_bit,get_subnet_bit_size(args),needed_bits_ls)
+    new_subnet_mask = get_new_subnet_mask(subnet_mask,last_bit,get_subnet_bit_count(args),needed_bits_ls)
     cidr_prefix = get_new_prefix(new_subnet_mask)
-    if (validate_subnet(last_bit, get_subnet_bit_size(args))):
+    if (validate_subnet(last_bit, get_subnet_bit_count(args))):
         print_subnets(subnet_mask,last_bit,needed_bits_ls, ip, args)
         new_mask_prefix_table.add_row([new_subnet_mask, get_new_prefix(new_subnet_mask)])
         print(new_mask_prefix_table)
