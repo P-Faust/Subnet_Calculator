@@ -70,12 +70,12 @@ def print_hosts(subnetmask,last_bit,ip,args, subnet_id):
 
 # Gibt die Broadcast-Adresse für ein Subnetz zurück
 def get_broadcast(ip,last_bit,needed_bit):
-    last_host = ip[:]
-    last_host = last_host[last_bit+needed_bit::1]
-    for x in range(len(last_host)):
-        last_host[x] = "1"
+    broadcast_bits = ip[:]
+    broadcast_bits = broadcast_bits[last_bit+needed_bit::1]
+    for x in range(len(broadcast_bits)):
+        broadcast_bits[x] = "1"
     broadcast_ip = ip[:]
-    broadcast_ip[last_bit+needed_bit::] = last_host
+    broadcast_ip[last_bit+needed_bit::] = broadcast_bits
     broadcast_ip = ''.join(broadcast_ip)
     return broadcast_ip
 
